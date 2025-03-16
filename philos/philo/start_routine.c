@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/16 16:18:51 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/16 22:28:27 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int eat(t_philo *philo)
 	// take first fork
 	pthread_mutex_lock(philo->first_f);
 	time = get_current_time() - philo->env->start_routine;
-	if (philo->last_meal != 0 && is_philo_die(philo) == 1)
+	if (get_long(philo->env, &philo->env->stop))
 	{
 		pthread_mutex_unlock(philo->first_f);
 		return (1);
@@ -64,19 +64,19 @@ int eat(t_philo *philo)
 	// take first second
 	pthread_mutex_lock(philo->second_f);
 	time = get_current_time() - philo->env->start_routine;
-	printf("%ld %ld has taken a fork second\n", time, philo->philo_id);
-	if (philo->last_meal != 0 && is_philo_die(philo) == 1)
+	if (get_long(philo->env, &philo->env->stop))
 	{
 		pthread_mutex_unlock(philo->first_f);
 		pthread_mutex_unlock(philo->second_f);
 		return (1);
 	}
+	printf("%ld %ld has taken a fork second\n", time, philo->philo_id);
 	// eat
 	time = get_current_time() - philo->env->start_routine;
 	philo->last_meal = time;
 	printf("%ld %ld is eating\n", time, philo->philo_id);
 	doing_event(philo, philo->env->time_to_eat);
-	if (philo->last_meal != 0 && is_philo_die(philo) == 1)
+	if (get_long(philo->env, &philo->env->stop))
 	{
 		pthread_mutex_unlock(philo->first_f);
 		pthread_mutex_unlock(philo->second_f);
@@ -100,7 +100,7 @@ void *philo_routine(void *info)
 		// think
 		time = get_current_time() - philo->env->start_routine;
 		printf("%ld %ld is thinking\n", time, philo->philo_id);
-		if (philo->last_meal != 0 && is_philo_die(philo) == 1)
+		if (get_long(philo->env, &philo->env->stop))
 			break ;
 		// eat
 		if (eat(philo) == 1)
@@ -110,7 +110,7 @@ void *philo_routine(void *info)
 		time = get_current_time() - philo->env->start_routine;
 		printf("%ld %ld is sleeping\n", time, philo->philo_id);
 		doing_event(philo, philo->env->time_to_sleep);
-		if (philo->last_meal != 0 && is_philo_die(philo) == 1)
+		if (get_long(philo->env, &philo->env->stop))
 			break ;
 	}
 	return (NULL);
@@ -119,22 +119,19 @@ void *philo_routine(void *info)
 int monitor_routine(t_env *env)
 {
 	int i;
-	long check;
 
 	while (1)
 	{
 		i = 0;
 		while (i < env->philo_num)
 		{
-			check = get_long(env, &env->philos[i].dead);
-			printf("is philo %ld die %ld\n", env->philos[i].philo_id, check);
-			if (check == 1)
+			if (is_philo_die(&env->philos[i]))
 			{
 				set_long(env, &env->stop, 1);
 				return (1);
 			}
 			i++;
-			ft_usleep(100);
+			// ft_usleep(100);
 		}
 	}
 	return (0);
