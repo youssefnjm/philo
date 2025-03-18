@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:18:41 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/18 02:44:17 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,19 @@ void	*philo_routine(void *info)
 		if (get_long(philo->env, &philo->env->stop))
 			break ;
 	}
+	return (NULL);
+}
+
+void	*one_philo(void *info)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)info;
+	wait_all(philo);
+	print_think(philo);
+	pthread_mutex_lock(philo->first_f);
+	print_fork(philo);
+	while (!get_long(philo->env, &philo->env->stop))
+		ft_usleep(10);
 	return (NULL);
 }

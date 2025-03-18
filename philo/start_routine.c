@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:15:41 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/18 02:34:59 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	monitor_routine(t_env *env)
 				return (1);
 			}
 			i++;
-			// puts("gggg");
 		}
 		ft_usleep(10);
 	}
@@ -60,7 +59,10 @@ int	monitor_routine(t_env *env)
 int	start_simulation(t_env *env)
 {
 	if (env->philo_num == 1)
-		return (0);
+	{
+		if (create_threads(env, one_philo) == 1)
+			return (1);
+	}
 	else
 	{
 		if (create_threads(env, philo_routine) == 1)
