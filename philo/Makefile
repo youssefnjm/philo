@@ -7,8 +7,9 @@ SRC=main.c \
 	init_inputs.c \
 	start_routine.c \
 	getter_setter.c \
-	utils.c \
-	output.c
+	philo_routine.c \
+	output.c \
+	utils.c
 
 OBJ=$(SRC:.c=.o)
 

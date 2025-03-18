@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 16:27:11 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/17 17:49:29 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/18 02:03:23 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,25 @@ void	init_philos(t_env *env)
 		env->philos[i].dead = 0;
 		env->philos[i].eating_meals = 0;
 		env->philos[i].last_meal = 0;
-		// if (i == env->philo_num)
-		// {
-		// 	env->philos[i].first_f = &env->forks[(i + 1) % env->philo_num];
-		// 	env->philos[i].second_f = &env->forks[i];
-		// }
-		// else
-		// {
+		if (i == env->philo_num)
+		{
+			env->philos[i].first_f = &env->forks[(i + 1) % env->philo_num];
+			env->philos[i].second_f = &env->forks[i];
+		}
+		else
+		{
 			env->philos[i].first_f = &env->forks[i];
 			env->philos[i].second_f = &env->forks[(i + 1) % env->philo_num];
-		// }
+		}
 		env->philos[i].env = env;
-		env->philos[i].full = 0; //
+		env->philos[i].full = 0;
 		i++;
 	}
 }
 
 int	init_forks(t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < env->philo_num)
@@ -71,7 +71,7 @@ int	init_env(t_env *env, int ac, char **av)
 		env->meals_limit = -1;
 	env->start_routine = 0;
 	env->end_routine = 0;
-	env->philos_full = 0; //
+	env->philos_full = 0;
 	if (pthread_mutex_init(&env->lock, NULL) != 0)
 		return (1);
 	if (init_forks(env) == 1)
