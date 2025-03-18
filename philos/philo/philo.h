@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:57:21 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/15 17:49:24 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/18 01:04:15 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_philo
 	long			dead;
 	long			eating_meals;
 	size_t			last_meal;
+	long			full; //
 	pthread_mutex_t	*second_f;
 	pthread_mutex_t	*first_f;
 	t_env			*env;
@@ -42,6 +43,7 @@ typedef struct s_env
 	long			stop;
 	long			wait_flag;
 	long			philo_num;
+	long			philos_full; //
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
@@ -70,5 +72,11 @@ void set_ulong(t_env *env, size_t *dest, size_t value);
 void set_long(t_env *env, long *dest, long value);
 size_t get_ulong(t_env *env, size_t *dest);
 long get_long(t_env *env, long *dest);
+
+// print
+void	print_fork(t_philo *philo, size_t time);
+void	print_eating(t_philo *philo, size_t time);
+void	print_sleep(t_philo *philo, size_t time);
+void	print_think(t_philo *philo, size_t time);
 
 #endif
