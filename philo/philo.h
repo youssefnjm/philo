@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:57:21 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:42:38 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/19 02:14:29 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	print_fork(t_philo *philo);
 void	print_eating(t_philo *philo);
 void	print_sleep(t_philo *philo);
 void	print_think(t_philo *philo);
+void	print_died(t_philo *philo);
 
 void	*philo_routine(void *info);
 void	*one_philo(void *info);

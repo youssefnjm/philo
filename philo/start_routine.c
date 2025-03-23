@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:34:59 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/23 01:15:04 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 int	is_philo_die(t_philo *philo)
 {
 	size_t	time;
+	size_t	last;
 
 	if (get_long(philo->env, &philo->env->stop))
 		return (1);
-	time = get_current_time() - philo->env->start_routine;
-	if (time - philo->last_meal >= philo->env->time_to_die)
+	time = get_current_time();
+	last = get_ulong(philo->env, &philo->last_meal);
+	if (time - last > philo->env->time_to_die)
 	{
 		if (philo->env->stop == 0)
 		{
 			set_long(philo->env, &philo->env->stop, 1);
-			printf(RED"%ld %ld died\n"RESET, time, philo->philo_id);
+			print_died(philo);
 			return (1);
 		}
 		return (1);
@@ -35,14 +37,17 @@ int	is_philo_die(t_philo *philo)
 int	monitor_routine(t_env *env)
 {
 	int	i;
-
+	ft_usleep(50);
 	while (!get_long(env, &env->stop) && env->philos_full != env->philo_num)
 	{
 		i = 0;
 		while (i < env->philo_num)
 		{	
 			if (get_long(env, &env->philos[i].full))
+			{
 				env->philos_full = env->philos_full + 1;
+				return (1);
+			}
 			if (!get_long(env, &env->philos[i].full)
 				&& is_philo_die(&env->philos[i]))
 			{
@@ -51,13 +56,15 @@ int	monitor_routine(t_env *env)
 			}
 			i++;
 		}
-		ft_usleep(10);
 	}
 	return (0);
 }
 
 int	start_simulation(t_env *env)
 {
+	int i;
+
+	i = 0;
 	if (env->philo_num == 1)
 	{
 		if (create_threads(env, one_philo) == 1)
@@ -74,5 +81,7 @@ int	start_simulation(t_env *env)
 	monitor_routine(env);
 	if (join_threads(env) == 1)
 		return (1);
+	while (i < env->philo_num)
+		pthread_mutex_destroy(&env->forks[i++]);
 	return (0);
 }

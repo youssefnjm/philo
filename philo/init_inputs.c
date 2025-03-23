@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 16:27:11 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:03:23 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/23 01:11:23 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_philos(t_env *env)
 		env->philos[i].dead = 0;
 		env->philos[i].eating_meals = 0;
 		env->philos[i].last_meal = 0;
-		if (i == env->philo_num)
+		if (i == (env->philo_num - 1))
 		{
 			env->philos[i].first_f = &env->forks[(i + 1) % env->philo_num];
 			env->philos[i].second_f = &env->forks[i];

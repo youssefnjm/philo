@@ -6,13 +6,13 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:44:17 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/23 03:09:41 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	doing_event(t_philo *philo, size_t milliseconds)
+int	doing_event(t_philo *philo, size_t milliseconds)
 {
 	size_t	start;
 
@@ -20,14 +20,15 @@ void	doing_event(t_philo *philo, size_t milliseconds)
 	while ((get_current_time() - start) < milliseconds)
 	{
 		if (get_long(philo->env, &philo->env->stop) == 1)
-			return ;
+			return (1);
 	}
+	return (0);
 }
 
 int	eat(t_philo *philo)
 {
-	if (get_long(philo->env, &philo->env->stop))
-		return (1);
+	size_t last;
+
 	pthread_mutex_lock(philo->first_f);
 	if (get_long(philo->env, &philo->env->stop))
 	{
@@ -36,17 +37,13 @@ int	eat(t_philo *philo)
 	}
 	print_fork(philo);
 	pthread_mutex_lock(philo->second_f);
-	if (get_long(philo->env, &philo->env->stop))
-	{
-		pthread_mutex_unlock(philo->first_f);
-		pthread_mutex_unlock(philo->second_f);
-		return (1);
-	}
 	print_fork(philo);
-	philo->last_meal = get_current_time() - philo->env->start_routine;
+	// last = get_current_time();
+	// last = get_current_time() - philo->env->start_routine;
+	last = get_current_time();
+	set_ulong(philo->env, &philo->last_meal, last);
 	print_eating(philo);
-	doing_event(philo, philo->env->time_to_eat);
-	if (get_long(philo->env, &philo->env->stop))
+	if (doing_event(philo, philo->env->time_to_eat) == 1)
 	{
 		pthread_mutex_unlock(philo->first_f);
 		pthread_mutex_unlock(philo->second_f);
@@ -63,11 +60,11 @@ void	*philo_routine(void *info)
 
 	philo = (t_philo *)info;
 	wait_all(philo);
-	while (1)
+	philo->last_meal = get_current_time();
+	if (philo->philo_id % 2 == 0)
+		ft_usleep(50);
+	while (!get_long(philo->env, &philo->env->stop))
 	{
-		print_think(philo);
-		if (get_long(philo->env, &philo->env->stop))
-			break ;
 		if (eat(philo) == 1)
 			break ;
 		philo->eating_meals++;
@@ -81,6 +78,7 @@ void	*philo_routine(void *info)
 		doing_event(philo, philo->env->time_to_sleep);
 		if (get_long(philo->env, &philo->env->stop))
 			break ;
+		print_think(philo);
 	}
 	return (NULL);
 }
@@ -91,6 +89,7 @@ void	*one_philo(void *info)
 
 	philo = (t_philo *)info;
 	wait_all(philo);
+	philo->last_meal = get_current_time();
 	print_think(philo);
 	pthread_mutex_lock(philo->first_f);
 	print_fork(philo);
