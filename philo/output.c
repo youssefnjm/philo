@@ -32,18 +32,18 @@ void	print_died(t_philo *philo)
 {
 	size_t	time;
 
-	pthread_mutex_lock(&philo->env->lock);
+	pthread_mutex_lock(&philo->env->write_lock);
 	time = get_current_time() - philo->env->start_routine;
 	ft_putnbr(time);
 	write(1, " ", 1);
 	ft_putnbr(philo->philo_id);
 	write(1, " died\n", 7);
-	pthread_mutex_unlock(&philo->env->lock);
+	pthread_mutex_unlock(&philo->env->write_lock);
 }
 
 void	write_status(t_philo *philo, char *str, int len)
 {
-	size_t time;
+	size_t	time;
 
 	pthread_mutex_lock(&philo->env->write_lock);
 	if (get_long(&philo->env->dead_lock, &philo->env->stop) == 0)
@@ -53,7 +53,6 @@ void	write_status(t_philo *philo, char *str, int len)
 		write(1, " ", 1);
 		ft_putnbr(philo->philo_id);
 		write(1, str, len);
-
 	}
 	pthread_mutex_unlock(&philo->env->write_lock);
 }

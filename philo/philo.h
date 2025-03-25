@@ -61,6 +61,7 @@ typedef struct s_env
 int		handle_inputs(t_env *env, int ac, char **av);
 long	ft_atoi(const char *str);
 int		init_env(t_env *env, int ac, char **av);
+void	clean_all(t_env *env);
 int		start_simulation(t_env *env);
 
 size_t	get_current_time(void);
@@ -74,10 +75,6 @@ void	set_long(pthread_mutex_t *lock, long *dest, long value);
 size_t	get_ulong(pthread_mutex_t *lock, size_t *dest);
 long	get_long(pthread_mutex_t *lock, long *dest);
 
-void	print_fork(t_philo *philo);
-void	print_eating(t_philo *philo);
-void	print_sleep(t_philo *philo);
-void	print_think(t_philo *philo);
 void	print_died(t_philo *philo);
 void	write_status(t_philo *philo, char *str, int len);
 

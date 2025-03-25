@@ -37,12 +37,14 @@ int	is_philo_die(t_philo *philo)
 int	monitor_routine(t_env *env)
 {
 	int	i;
+
 	ft_usleep(50);
-	while (!get_long(&env->dead_lock, &env->stop) && env->philos_full != env->philo_num)
+	while (!get_long(&env->dead_lock, &env->stop)
+		&& env->philos_full != env->philo_num)
 	{
 		i = 0;
 		while (i < env->philo_num)
-		{	
+		{
 			if (get_long(&env->dead_lock, &env->philos[i].full))
 			{
 				env->philos_full = env->philos_full + 1;
@@ -62,7 +64,7 @@ int	monitor_routine(t_env *env)
 
 int	start_simulation(t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (env->philo_num == 1)
@@ -81,7 +83,5 @@ int	start_simulation(t_env *env)
 	monitor_routine(env);
 	if (join_threads(env) == 1)
 		return (1);
-	while (i < env->philo_num)
-		pthread_mutex_destroy(&env->forks[i++]);
 	return (0);
 }

@@ -27,7 +27,7 @@ int	doing_event(t_philo *philo, size_t milliseconds)
 
 int	eat(t_philo *philo)
 {
-	size_t last;
+	size_t	last;
 
 	pthread_mutex_lock(philo->first_f);
 	if (get_long(&philo->env->dead_lock, &philo->env->stop))
@@ -35,14 +35,11 @@ int	eat(t_philo *philo)
 		pthread_mutex_unlock(philo->first_f);
 		return (1);
 	}
-	// print_fork(philo);
 	write_status(philo, " has taken a fork\n", 19);
 	pthread_mutex_lock(philo->second_f);
-	// print_fork(philo);
 	write_status(philo, " has taken a fork\n", 19);
 	last = get_current_time();
 	set_ulong(&philo->env->last_lock, &philo->last_meal, last);
-	// print_eating(philo);
 	write_status(philo, " is eating\n", 12);
 	if (doing_event(philo, philo->env->time_to_eat) == 1)
 	{
@@ -75,14 +72,11 @@ void	*philo_routine(void *info)
 			set_long(&philo->env->lock, &philo->full, 1);
 			break ;
 		}
-		// print_sleep(philo);
 		write_status(philo, " is sleeping\n", 14);
 		doing_event(philo, philo->env->time_to_sleep);
 		if (get_long(&philo->env->dead_lock, &philo->env->stop))
 			break ;
-		// print_think(philo);
-		write_status(philo,  " is thinking\n", 14);
-		
+		write_status(philo, " is thinking\n", 14);
 	}
 	return (NULL);
 }
@@ -94,10 +88,10 @@ void	*one_philo(void *info)
 	philo = (t_philo *)info;
 	wait_all(philo);
 	philo->last_meal = get_current_time();
-	print_think(philo);
+	write_status(philo, " is thinking\n", 14);
 	pthread_mutex_lock(philo->first_f);
-	print_fork(philo);
+	write_status(philo, " has taken a fork\n", 19);
 	while (!get_long(&philo->env->dead_lock, &philo->env->stop))
-		ft_usleep(10);
+		ft_usleep(philo->env->time_to_die / 10);
 	return (NULL);
 }

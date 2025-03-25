@@ -58,7 +58,7 @@ int	init_forks(t_env *env)
 	return (0);
 }
 
-int init_mutex(t_env *env)
+int	init_mutex(t_env *env)
 {
 	if (pthread_mutex_init(&env->write_lock, NULL) != 0)
 		return (1);
@@ -104,4 +104,17 @@ int	init_env(t_env *env, int ac, char **av)
 		return (1);
 	init_philos(env);
 	return (0);
+}
+
+void	clean_all(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	while (i < env->philo_num)
+		pthread_mutex_destroy(&env->forks[i++]);
+	pthread_mutex_destroy(&env->write_lock);
+	pthread_mutex_destroy(&env->dead_lock);
+	pthread_mutex_destroy(&env->last_lock);
+	pthread_mutex_destroy(&env->lock);
 }

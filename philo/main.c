@@ -24,5 +24,6 @@ int	main(int ac, char **av)
 		return (1);
 	if (start_simulation(&env) == 1)
 		return (1);
+	clean_all(&env);
 	return (0);
 }
