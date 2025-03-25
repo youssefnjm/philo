@@ -37,7 +37,7 @@ void	wait_all(t_philo *philo)
 
 	while (1)
 	{
-		check = get_long(philo->env, &philo->env->wait_flag);
+		check = get_long(&philo->env->lock, &philo->env->wait_flag);
 		if (check == 1)
 			break ;
 	}

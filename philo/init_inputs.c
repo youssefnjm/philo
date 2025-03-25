@@ -58,6 +58,32 @@ int	init_forks(t_env *env)
 	return (0);
 }
 
+int init_mutex(t_env *env)
+{
+	if (pthread_mutex_init(&env->write_lock, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&env->dead_lock, NULL) != 0)
+	{
+		pthread_mutex_destroy(&env->write_lock);
+		pthread_mutex_destroy(&env->write_lock);
+		return (1);
+	}
+	if (pthread_mutex_init(&env->last_lock, NULL) != 0)
+	{
+		pthread_mutex_destroy(&env->write_lock);
+		pthread_mutex_destroy(&env->dead_lock);
+		return (1);
+	}
+	if (pthread_mutex_init(&env->lock, NULL) != 0)
+	{
+		pthread_mutex_destroy(&env->write_lock);
+		pthread_mutex_destroy(&env->dead_lock);
+		pthread_mutex_destroy(&env->last_lock);
+		return (1);
+	}
+	return (0);
+}
+
 int	init_env(t_env *env, int ac, char **av)
 {
 	env->stop = 0;
@@ -72,7 +98,7 @@ int	init_env(t_env *env, int ac, char **av)
 	env->start_routine = 0;
 	env->end_routine = 0;
 	env->philos_full = 0;
-	if (pthread_mutex_init(&env->lock, NULL) != 0)
+	if (init_mutex(env) == 1)
 		return (1);
 	if (init_forks(env) == 1)
 		return (1);

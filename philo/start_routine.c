@@ -17,15 +17,15 @@ int	is_philo_die(t_philo *philo)
 	size_t	time;
 	size_t	last;
 
-	if (get_long(philo->env, &philo->env->stop))
+	if (get_long(&philo->env->dead_lock, &philo->env->stop))
 		return (1);
 	time = get_current_time();
-	last = get_ulong(philo->env, &philo->last_meal);
+	last = get_ulong(&philo->env->last_lock, &philo->last_meal);
 	if (time - last > philo->env->time_to_die)
 	{
 		if (philo->env->stop == 0)
 		{
-			set_long(philo->env, &philo->env->stop, 1);
+			set_long(&philo->env->dead_lock, &philo->env->stop, 1);
 			print_died(philo);
 			return (1);
 		}
@@ -38,20 +38,20 @@ int	monitor_routine(t_env *env)
 {
 	int	i;
 	ft_usleep(50);
-	while (!get_long(env, &env->stop) && env->philos_full != env->philo_num)
+	while (!get_long(&env->dead_lock, &env->stop) && env->philos_full != env->philo_num)
 	{
 		i = 0;
 		while (i < env->philo_num)
 		{	
-			if (get_long(env, &env->philos[i].full))
+			if (get_long(&env->dead_lock, &env->philos[i].full))
 			{
 				env->philos_full = env->philos_full + 1;
 				return (1);
 			}
-			if (!get_long(env, &env->philos[i].full)
+			if (!get_long(&env->dead_lock, &env->philos[i].full)
 				&& is_philo_die(&env->philos[i]))
 			{
-				set_long(env, &env->stop, 1);
+				set_long(&env->dead_lock, &env->stop, 1);
 				return (1);
 			}
 			i++;
@@ -77,7 +77,7 @@ int	start_simulation(t_env *env)
 	}
 	ft_usleep(100);
 	env->start_routine = get_current_time();
-	set_long(env, &env->wait_flag, 1);
+	set_long(&env->lock, &env->wait_flag, 1);
 	monitor_routine(env);
 	if (join_threads(env) == 1)
 		return (1);

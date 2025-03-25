@@ -28,58 +28,6 @@ void	ft_putnbr(size_t n)
 	}
 }
 
-void	print_fork(t_philo *philo)
-{
-	size_t	time;
-
-	pthread_mutex_lock(&philo->env->lock);
-	time = get_current_time() - philo->env->start_routine;
-	ft_putnbr(time);
-	write(1, " ", 1);
-	ft_putnbr(philo->philo_id);
-	write(1, " has taken a fork\n", 19);
-	pthread_mutex_unlock(&philo->env->lock);
-}
-
-void	print_eating(t_philo *philo)
-{
-	size_t	time;
-
-	pthread_mutex_lock(&philo->env->lock);
-	time = get_current_time() - philo->env->start_routine;
-	ft_putnbr(time);
-	write(1, " ", 1);
-	ft_putnbr(philo->philo_id);
-	write(1, " is eating\n", 12);
-	pthread_mutex_unlock(&philo->env->lock);
-}
-
-void	print_sleep(t_philo *philo)
-{
-	size_t	time;
-
-	pthread_mutex_lock(&philo->env->lock);
-	time = get_current_time() - philo->env->start_routine;
-	ft_putnbr(time);
-	write(1, " ", 1);
-	ft_putnbr(philo->philo_id);
-	write(1, " is sleeping\n", 14);
-	pthread_mutex_unlock(&philo->env->lock);
-}
-
-void	print_think(t_philo *philo)
-{
-	size_t	time;
-
-	pthread_mutex_lock(&philo->env->lock);
-	time = get_current_time() - philo->env->start_routine;
-	ft_putnbr(time);
-	write(1, " ", 1);
-	ft_putnbr(philo->philo_id);
-	write(1, " is thinking\n", 14);
-	pthread_mutex_unlock(&philo->env->lock);
-}
-
 void	print_died(t_philo *philo)
 {
 	size_t	time;
@@ -91,4 +39,21 @@ void	print_died(t_philo *philo)
 	ft_putnbr(philo->philo_id);
 	write(1, " died\n", 7);
 	pthread_mutex_unlock(&philo->env->lock);
+}
+
+void	write_status(t_philo *philo, char *str, int len)
+{
+	size_t time;
+
+	pthread_mutex_lock(&philo->env->write_lock);
+	if (get_long(&philo->env->dead_lock, &philo->env->stop) == 0)
+	{
+		time = get_current_time() - philo->env->start_routine;
+		ft_putnbr(time);
+		write(1, " ", 1);
+		ft_putnbr(philo->philo_id);
+		write(1, str, len);
+
+	}
+	pthread_mutex_unlock(&philo->env->write_lock);
 }

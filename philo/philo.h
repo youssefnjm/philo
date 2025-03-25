@@ -50,6 +50,9 @@ typedef struct s_env
 	size_t			time_to_sleep;
 	size_t			start_routine;
 	size_t			end_routine;
+	pthread_mutex_t	write_lock;
+	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	last_lock;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
@@ -66,16 +69,17 @@ void	wait_all(t_philo *philo);
 int		create_threads(t_env *env, void *fn());
 int		join_threads(t_env *env);
 
-void	set_ulong(t_env *env, size_t *dest, size_t value);
-void	set_long(t_env *env, long *dest, long value);
-size_t	get_ulong(t_env *env, size_t *dest);
-long	get_long(t_env *env, long *dest);
+void	set_ulong(pthread_mutex_t *lock, size_t *dest, size_t value);
+void	set_long(pthread_mutex_t *lock, long *dest, long value);
+size_t	get_ulong(pthread_mutex_t *lock, size_t *dest);
+long	get_long(pthread_mutex_t *lock, long *dest);
 
 void	print_fork(t_philo *philo);
 void	print_eating(t_philo *philo);
 void	print_sleep(t_philo *philo);
 void	print_think(t_philo *philo);
 void	print_died(t_philo *philo);
+void	write_status(t_philo *philo, char *str, int len);
 
 void	*philo_routine(void *info);
 void	*one_philo(void *info);

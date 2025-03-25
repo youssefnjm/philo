@@ -12,36 +12,36 @@
 
 #include "philo.h"
 
-void	set_ulong(t_env *env, size_t *dest, size_t value)
+void	set_ulong(pthread_mutex_t *lock, size_t *dest, size_t value)
 {
-	pthread_mutex_lock(&env->lock);
+	pthread_mutex_lock(lock);
 	*dest = value;
-	pthread_mutex_unlock(&env->lock);
+	pthread_mutex_unlock(lock);
 }
 
-size_t	get_ulong(t_env *env, size_t *dest)
+size_t	get_ulong(pthread_mutex_t *lock, size_t *dest)
 {
 	size_t	res;
 
-	pthread_mutex_lock(&env->lock);
+	pthread_mutex_lock(lock);
 	res = *dest;
-	pthread_mutex_unlock(&env->lock);
+	pthread_mutex_unlock(lock);
 	return (res);
 }
 
-void	set_long(t_env *env, long *dest, long value)
+void	set_long(pthread_mutex_t *lock, long *dest, long value)
 {
-	pthread_mutex_lock(&env->lock);
+	pthread_mutex_lock(lock);
 	*dest = value;
-	pthread_mutex_unlock(&env->lock);
+	pthread_mutex_unlock(lock);
 }
 
-long	get_long(t_env *env, long *dest)
+long	get_long(pthread_mutex_t *lock, long *dest)
 {
 	long	res;
 
-	pthread_mutex_lock(&env->lock);
+	pthread_mutex_lock(lock);
 	res = *dest;
-	pthread_mutex_unlock(&env->lock);
+	pthread_mutex_unlock(lock);
 	return (res);
 }
