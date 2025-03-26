@@ -96,7 +96,6 @@ int	init_env(t_env *env, int ac, char **av)
 	else
 		env->meals_limit = -1;
 	env->start_routine = 0;
-	env->end_routine = 0;
 	env->philos_full = 0;
 	if (init_mutex(env) == 1)
 		return (1);

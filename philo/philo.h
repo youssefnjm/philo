@@ -40,6 +40,7 @@ typedef struct s_philo
 
 typedef struct s_env
 {
+	pthread_t		monitor_thread;
 	long			stop;
 	long			wait_flag;
 	long			philo_num;
@@ -49,7 +50,6 @@ typedef struct s_env
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			start_routine;
-	size_t			end_routine;
 	pthread_mutex_t	write_lock;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	last_lock;

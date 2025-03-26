@@ -58,6 +58,7 @@ int	monitor_routine(t_env *env)
 			}
 			i++;
 		}
+		ft_usleep(5);
 	}
 	return (0);
 }

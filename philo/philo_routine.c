@@ -74,8 +74,6 @@ void	*philo_routine(void *info)
 		}
 		write_status(philo, " is sleeping\n", 14);
 		doing_event(philo, philo->env->time_to_sleep);
-		if (get_long(&philo->env->dead_lock, &philo->env->stop))
-			break ;
 		write_status(philo, " is thinking\n", 14);
 	}
 	return (NULL);
