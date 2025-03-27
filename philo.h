@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:57:21 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/19 02:14:29 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:30:02 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	clean_all(t_env *env);
 int		start_simulation(t_env *env);
 
 size_t	get_current_time(void);
-void	ft_usleep(size_t milliseconds);
+int		doing_event(t_philo *philo, size_t milliseconds);
 void	wait_all(t_philo *philo);
 int		create_threads(t_env *env, void *fn());
 int		join_threads(t_env *env);

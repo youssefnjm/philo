@@ -6,11 +6,25 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:18:41 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/18 02:39:21 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:30:06 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	doing_event(t_philo *philo, size_t milliseconds)
+{
+	size_t	start;
+
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+	{
+		if (get_long(&philo->env->dead_lock, &philo->env->stop) == 1)
+			return (1);
+		usleep(100);
+	}
+	return (0);
+}
 
 size_t	get_current_time(void)
 {
@@ -18,17 +32,6 @@ size_t	get_current_time(void)
 
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-void	ft_usleep(size_t milliseconds)
-{
-	size_t	start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-	{
-		usleep(150);
-	}
 }
 
 void	wait_all(t_philo *philo)

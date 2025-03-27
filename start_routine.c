@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/23 01:15:04 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:28:35 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,14 @@ int	monitor_routine(t_env *env)
 {
 	int	i;
 
-	ft_usleep(50);
-	while (!get_long(&env->dead_lock, &env->stop)
-		&& env->philos_full != env->philo_num)
+	usleep(100);
+	while (env->philos_full != env->philo_num)
 	{
 		i = 0;
-		while (i < env->philo_num)
+		while (i < env->philo_num && !get_long(&env->dead_lock, &env->stop))
 		{
 			if (get_long(&env->dead_lock, &env->philos[i].full))
-			{
-				env->philos_full = env->philos_full + 1;
-				return (1);
-			}
+				env->philos_full += + 1;
 			if (!get_long(&env->dead_lock, &env->philos[i].full)
 				&& is_philo_die(&env->philos[i]))
 			{
@@ -58,16 +54,13 @@ int	monitor_routine(t_env *env)
 			}
 			i++;
 		}
-		ft_usleep(5);
+		usleep(100);
 	}
 	return (0);
 }
 
 int	start_simulation(t_env *env)
 {
-	int	i;
-
-	i = 0;
 	if (env->philo_num == 1)
 	{
 		if (create_threads(env, one_philo) == 1)
@@ -78,7 +71,7 @@ int	start_simulation(t_env *env)
 		if (create_threads(env, philo_routine) == 1)
 			return (1);
 	}
-	ft_usleep(100);
+	usleep(100);
 	env->start_routine = get_current_time();
 	set_long(&env->lock, &env->wait_flag, 1);
 	monitor_routine(env);
