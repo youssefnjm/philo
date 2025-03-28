@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 16:35:56 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:49:01 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int	is_philo_die(t_philo *philo)
 	time = get_current_time() - philo->env->start_routine;
 	last = get_ulong(&philo->env->last_lock, &philo->last_meal);
 	if (time - last > philo->env->time_to_die)
-	{
-		printf("time[%ld]-last[%ld] = %ld\n", time, last, (time - last));
 		return (1);
-	}
 	return (0);
 }
 

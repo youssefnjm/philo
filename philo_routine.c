@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 16:37:52 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:44:47 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	*philo_routine(void *info)
 
 	philo = (t_philo *)info;
 	wait_all(philo);
-	if (philo->philo_id % 2 == 0)
+	if (philo->philo_id % 2)
 		usleep(1000);
 	while (!philo->env->stop)
 	{
