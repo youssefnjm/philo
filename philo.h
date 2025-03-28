@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:57:21 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/27 18:30:02 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:21:25 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_env
 	long			stop;
 	long			wait_flag;
 	long			philo_num;
-	long			philos_full;
 	long			meals_limit;
 	size_t			time_to_die;
 	size_t			time_to_eat;

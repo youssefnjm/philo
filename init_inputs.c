@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 16:27:11 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 16:38:03 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:21:29 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	init_env(t_env *env, int ac, char **av)
 	else
 		env->meals_limit = -1;
 	env->start_routine = 0;
-	env->philos_full = 0;
 	if (init_mutex(env) == 1)
 		return (1);
 	if (init_forks(env) == 1)
