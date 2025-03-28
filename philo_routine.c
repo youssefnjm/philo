@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 17:44:47 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:03:48 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	*one_philo(void *info)
 
 	philo = (t_philo *)info;
 	wait_all(philo);
-	philo->last_meal = get_current_time();
+	philo->last_meal = 0;
 	write_status(philo, " is thinking\n", 14);
 	pthread_mutex_lock(philo->first_f);
 	write_status(philo, " has taken a fork\n", 19);
