@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:18:41 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/27 18:30:06 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:06:19 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,16 @@ int	join_threads(t_env *env)
 	{
 		if (pthread_join(env->philos[i].thread, NULL) != 0)
 		{
-			write(2, "error in create a thread\n", 26);
+			write(2, "error in join a thread\n", 24);
 			return (1);
 		}
 		i++;
+	}
+	set_long(&env->lock, &env->stop, 1);
+	if (pthread_join(env->monitor_thread, NULL) != 0)
+	{
+		write(2, "error in join a thread\n", 24);
+		return (1);
 	}
 	return (0);
 }

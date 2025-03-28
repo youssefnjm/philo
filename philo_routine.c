@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/27 18:33:10 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:20:00 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,25 @@ void	take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->first_f);
 	write_status(philo, " has taken a fork\n", 19);
+	if (get_long(&philo->env->dead_lock, &philo->env->stop))
+	{
+		pthread_mutex_unlock(philo->first_f);
+		return ;
+	}
 	pthread_mutex_lock(philo->second_f);
+	if (get_long(&philo->env->dead_lock, &philo->env->stop))
+	{
+		pthread_mutex_unlock(philo->first_f);
+		pthread_mutex_unlock(philo->second_f);
+		return ;
+	}
 	write_status(philo, " has taken a fork\n", 19);
 }
 
 void	eat(t_philo *philo)
 {
-	size_t	last;
-
 	write_status(philo, " is eating\n", 12);
-	last = get_current_time();
-	set_ulong(&philo->env->last_lock, &philo->last_meal, last);
+	set_ulong(&philo->env->last_lock, &philo->last_meal, get_current_time());
 	doing_event(philo, philo->env->time_to_eat);
 	philo->eating_meals++;
 	pthread_mutex_unlock(philo->first_f);
@@ -47,7 +55,7 @@ void	*philo_routine(void *info)
 	wait_all(philo);
 	philo->last_meal = get_current_time();
 	if (philo->philo_id % 2 == 0)
-		usleep(100);
+		usleep(1000);
 	while (!philo->env->stop)
 	{
 		take_forks(philo);

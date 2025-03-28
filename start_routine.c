@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/27 18:28:35 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:06:53 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,30 @@ int	is_philo_die(t_philo *philo)
 	return (0);
 }
 
-int	monitor_routine(t_env *env)
+void	*monitor_routine(void *info)
 {
 	int	i;
+	t_env *env;
 
-	usleep(100);
-	while (env->philos_full != env->philo_num)
+	env = (t_env *)info;
+	wait_all(&env->philos[0]);
+	while (!get_long(&env->dead_lock, &env->stop))
 	{
 		i = 0;
-		while (i < env->philo_num && !get_long(&env->dead_lock, &env->stop))
+		while (i < env->philo_num 
+			&& !get_long(&env->dead_lock, &env->stop) 
+			&& !get_long(&env->dead_lock, &env->philos[i].full))
 		{
-			if (get_long(&env->dead_lock, &env->philos[i].full))
-				env->philos_full += + 1;
-			if (!get_long(&env->dead_lock, &env->philos[i].full)
-				&& is_philo_die(&env->philos[i]))
+			if (is_philo_die(&env->philos[i]))
 			{
 				set_long(&env->dead_lock, &env->stop, 1);
-				return (1);
+				return (NULL);
 			}
 			i++;
 		}
-		usleep(100);
+		usleep(500);
 	}
-	return (0);
+	return (NULL);
 }
 
 int	start_simulation(t_env *env)
@@ -73,8 +74,13 @@ int	start_simulation(t_env *env)
 	}
 	usleep(100);
 	env->start_routine = get_current_time();
+	if (pthread_create(&env->monitor_thread, NULL
+		, monitor_routine, env) != 0)
+	{
+		write(2, "error in create a thread\n", 26);
+		return (1);
+	}
 	set_long(&env->lock, &env->wait_flag, 1);
-	monitor_routine(env);
 	if (join_threads(env) == 1)
 		return (1);
 	return (0);
