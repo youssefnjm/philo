@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 17:49:01 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:18:51 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ int	is_philo_die(t_philo *philo)
 
 void	*monitor_routine(void *info)
 {
-	int	i;
-	t_env *env;
+	int		i;
+	t_env	*env;
 
 	env = (t_env *)info;
 	wait_all(&env->philos[0]);
 	while (!get_long(&env->dead_lock, &env->stop))
 	{
 		i = 0;
-		while (i < env->philo_num 
+		while (i < env->philo_num
 			&& !get_long(&env->dead_lock, &env->stop))
 		{
 			if (!get_long(&env->dead_lock, &env->philos[i].full)
@@ -66,7 +66,7 @@ int	start_simulation(t_env *env)
 	usleep(100);
 	env->start_routine = get_current_time();
 	if (pthread_create(&env->monitor_thread, NULL
-		, monitor_routine, env) != 0)
+			, monitor_routine, env) != 0)
 	{
 		write(2, "error in create a thread\n", 26);
 		return (1);

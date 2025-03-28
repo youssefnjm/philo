@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 20:03:48 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:17:55 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	take_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	size_t last;
-	
+	size_t	last;
+
 	write_status(philo, " is eating\n", 12);
 	last = get_current_time() - philo->env->start_routine;
 	set_ulong(&philo->env->last_lock, &philo->last_meal, last);
