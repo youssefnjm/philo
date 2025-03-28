@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:55:26 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 16:06:53 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:35:56 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,11 @@ int	is_philo_die(t_philo *philo)
 	size_t	time;
 	size_t	last;
 
-	if (get_long(&philo->env->dead_lock, &philo->env->stop))
-		return (1);
-	time = get_current_time();
+	time = get_current_time() - philo->env->start_routine;
 	last = get_ulong(&philo->env->last_lock, &philo->last_meal);
 	if (time - last > philo->env->time_to_die)
 	{
-		if (philo->env->stop == 0)
-		{
-			set_long(&philo->env->dead_lock, &philo->env->stop, 1);
-			print_died(philo);
-			return (1);
-		}
+		printf("time[%ld]-last[%ld] = %ld\n", time, last, (time - last));
 		return (1);
 	}
 	return (0);
@@ -45,12 +38,13 @@ void	*monitor_routine(void *info)
 	{
 		i = 0;
 		while (i < env->philo_num 
-			&& !get_long(&env->dead_lock, &env->stop) 
-			&& !get_long(&env->dead_lock, &env->philos[i].full))
+			&& !get_long(&env->dead_lock, &env->stop))
 		{
-			if (is_philo_die(&env->philos[i]))
+			if (!get_long(&env->dead_lock, &env->philos[i].full)
+				&& is_philo_die(&env->philos[i]))
 			{
 				set_long(&env->dead_lock, &env->stop, 1);
+				print_died(&env->philos[i]);
 				return (NULL);
 			}
 			i++;

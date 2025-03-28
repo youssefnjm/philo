@@ -6,7 +6,7 @@
 /*   By: ynoujoum <ynoujoum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 01:56:34 by ynoujoum          #+#    #+#             */
-/*   Updated: 2025/03/28 13:20:00 by ynoujoum         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:37:52 by ynoujoum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@ void	take_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
+	size_t last;
+	
 	write_status(philo, " is eating\n", 12);
-	set_ulong(&philo->env->last_lock, &philo->last_meal, get_current_time());
+	last = get_current_time() - philo->env->start_routine;
+	set_ulong(&philo->env->last_lock, &philo->last_meal, last);
 	doing_event(philo, philo->env->time_to_eat);
 	philo->eating_meals++;
 	pthread_mutex_unlock(philo->first_f);
@@ -53,7 +56,6 @@ void	*philo_routine(void *info)
 
 	philo = (t_philo *)info;
 	wait_all(philo);
-	philo->last_meal = get_current_time();
 	if (philo->philo_id % 2 == 0)
 		usleep(1000);
 	while (!philo->env->stop)
