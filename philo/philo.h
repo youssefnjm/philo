@@ -13,15 +13,9 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <stdio.h>
-# include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
-
-# define RED "\033[1;31m"
-# define RESET "\033[0m"
-# define GREEN "\033[1;32m"
 
 typedef struct s_env	t_env;
 

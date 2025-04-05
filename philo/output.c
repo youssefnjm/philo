@@ -53,6 +53,7 @@ void	write_status(t_philo *philo, char *str, int len)
 		write(1, " ", 1);
 		ft_putnbr(philo->philo_id);
 		write(1, str, len);
+		write(1, "\n", 1);
 	}
 	pthread_mutex_unlock(&philo->env->write_lock);
 }

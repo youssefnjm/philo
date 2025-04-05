@@ -64,13 +64,13 @@ int	start_simulation(t_env *env)
 			return (1);
 	}
 	usleep(100);
-	env->start_routine = get_current_time();
 	if (pthread_create(&env->monitor_thread, NULL
 			, monitor_routine, env) != 0)
 	{
 		write(2, "error in create a thread\n", 26);
 		return (1);
 	}
+	env->start_routine = get_current_time();
 	set_long(&env->lock, &env->wait_flag, 1);
 	if (join_threads(env) == 1)
 		return (1);

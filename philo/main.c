@@ -23,7 +23,7 @@ int	main(int ac, char **av)
 	if (handle_inputs(&env, ac, av) == 1)
 		return (1);
 	if (start_simulation(&env) == 1)
-		return (1);
+		return (clean_all(&env), 1);
 	clean_all(&env);
 	return (0);
 }
